@@ -1,0 +1,6 @@
+1-Dirt
+2-Grass
+3-Stone
+4-Wood
+5-Leaves
+6-Bedrock
