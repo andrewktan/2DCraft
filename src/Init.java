@@ -2,8 +2,8 @@
 public class Init {
 
 	public static void main(String[] args) {
-		Map testmc= new Map(500);
-		testmc.debugDraw();
+		MainGui blah = new MainGui(100);
+		blah.setVisible(true);		
 	}
 
 }
