@@ -8,5 +8,6 @@ public class MainGui extends JFrame{
 	{
 		mainmap = new Map (w);
 		mainmap.debugDraw();
+		mainmap.save("map1");
 	}
 }

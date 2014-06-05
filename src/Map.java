@@ -1,7 +1,5 @@
 import java.awt.*;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
@@ -31,7 +29,7 @@ public class Map {
 		}
 		//stone and dirts
 		//initial elevations
-		int stoneend=(int)(Math.random()*3)+h/2+10;
+		int stoneend=(int)(Math.random()*3)+3*h/4;
 		int dirtend= (int)(stoneend-(Math.random()*2+4));
 
 		//left to right, varying elevation
@@ -52,6 +50,12 @@ public class Map {
 			else{
 				//don't do anything
 			}
+			
+			
+			
+			
+			
+			
 			for(int j=h-1;j>stoneend;j--)
 			{
 				twodarray[j][i]=new Tile(3,baseimages[3]);
@@ -86,7 +90,6 @@ public class Map {
 
 		} catch (FileNotFoundException e1) {System.out.println("Tile declarations not found");
 		}
-		System.out.println(tilelength);
 		//setting image array size to number of tiles
 		baseimages=new Image[tilelength];
 		for(int i=0;i<tilelength;i++)
@@ -113,7 +116,27 @@ public class Map {
 			System.out.println("");
 		}
 	}
-
+	
+	public void save(String fname)
+	{
+		File towrite=new File("D:\\2DCraft\\"+fname+".txt");
+		try {
+			PrintWriter goin= new PrintWriter(towrite);
+			
+			for(int i=0;i<h;i++)
+			{
+				for(int j=0;j<w;j++)
+				{
+					//goin.append(" ");
+					goin.print(twodarray[i][j].getId());
+				}
+				goin.println("");
+			}
+		} catch (IOException e) {
+			
+		}
+				
+	}
 	public void show (Graphics g, int x, int y)
 	{
 		for(int i=0;i<h;i++)
