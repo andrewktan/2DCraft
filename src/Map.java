@@ -18,7 +18,7 @@ public class Map {
 		initialize();
 		h=256;
 		w=width;
-		//#space created
+		//space created
 		twodarray= new Tile[h][width];
 		for(int i=0;i<h;i++)
 		{
@@ -40,7 +40,7 @@ public class Map {
 		{
 			//weighted randomly increase or decrease
 			double randchange=Math.random()*10;
-			int dirtchange=0;;
+			int dirtchange=0;
 			int stonechange=0;
 			if(randchange>8)
 			{
@@ -100,7 +100,7 @@ public class Map {
 	public void initialize()
 	{
 		//finding out number of possible tiles
-		File tilelist= new File("D:\\2DCraft\\useful minecraft\\tiles.txt");
+		File tilelist= new File("resources/tiles.txt");
 		int tilelength=0;
 		Scanner scan;
 		try {
@@ -121,7 +121,7 @@ public class Map {
 		for(int i=0;i<tilelength;i++)
 		{
 			try{
-				baseimages[i]=ImageIO.read(new File("D:\\2DCraft\\useful minecraft\\"+i+".png"));
+				baseimages[i]=ImageIO.read(new File("resources/" + i + ".png"));
 			}
 			catch(IOException e)
 			{
@@ -145,7 +145,7 @@ public class Map {
 	
 	public void save(String fname)
 	{
-		File towrite=new File("D:\\2DCraft\\"+fname+".txt");
+		File towrite=new File("resources/"+fname+".txt");
 		try {
 			PrintWriter goin= new PrintWriter(towrite);
 			
