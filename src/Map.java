@@ -16,7 +16,7 @@ public class Map {
 	{	
 		//parse in images
 		initialize();
-		h=100;
+		h=256;
 		w=width;
 		//#space created
 		twodarray= new Tile[h][width];
@@ -31,28 +31,54 @@ public class Map {
 		//initial elevations
 		int stoneend=(int)(Math.random()*3)+3*h/4;
 		int dirtend= (int)(stoneend-(Math.random()*2+4));
-
+		//keeping track of changes
+		int netchange=0;
+		char updown='n';
+		
 		//left to right, varying elevation
 		for(int i=0;i<width;i++)
 		{
 			//weighted randomly increase or decrease
 			double randchange=Math.random()*10;
+			int dirtchange=0;;
+			int stonechange=0;
 			if(randchange>8)
 			{
-				stoneend++;
-				dirtend++;
+				stonechange++;
+				dirtchange++;
+				netchange++;
+				updown='d';
 			}
 			else if(randchange<2)
 			{
-				stoneend--;
-				dirtend--;
+				stonechange--;
+				dirtchange--;
+				netchange--;
+				updown='u';
 			}
 			else{
 				//don't do anything
 			}
 			
-			
-			
+			//adjusting for elevation
+			double randhchange=Math.random()*netchange;
+			if(randhchange>h/8)
+			{
+				stonechange--;
+				dirtchange--;
+				netchange--;
+			}
+			else if (randhchange<-1*h/8)
+			{
+				stonechange++;
+				dirtchange++;
+				netchange++;
+			}
+			else{
+				//do nothing
+			}
+			stoneend=stoneend+stonechange;
+			dirtend=dirtend+dirtchange;
 			
 			
 			
