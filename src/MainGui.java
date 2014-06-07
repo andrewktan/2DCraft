@@ -7,7 +7,13 @@ public class MainGui extends JFrame{
 	public MainGui(int w)
 	{
 		mainmap = new Map (w);
-		mainmap.debugDraw();
-		mainmap.save("map1");
+        MapPanel mp = new MapPanel(mainmap);
+
+        setSize(1024, 512);
+        setResizable(false);
+        setContentPane(mp);
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 	}
 }

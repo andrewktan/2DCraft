@@ -16,7 +16,7 @@ public class Map {
 	{	
 		//parse in images
 		initialize();
-		h=256;
+		h=32;
 		w=width;
 		//space created
 		twodarray= new Tile[h][width];
@@ -153,7 +153,6 @@ public class Map {
 			{
 				for(int j=0;j<w;j++)
 				{
-					//goin.append(" ");
 					goin.print(twodarray[i][j].getId());
 				}
 				goin.println("");
@@ -163,6 +162,31 @@ public class Map {
 		}
 				
 	}
+
+    /**
+     * Accessor for map array
+     * @return
+     */
+    public Tile[][] getMapArray() {
+        return twodarray;
+    }
+
+    /**
+     * Accessor for map height
+     * @return
+     */
+    public int getHeight() {
+        return h;
+    }
+
+    /**
+     * Accessor for map width
+     * @return
+     */
+    public int getWidth() {
+        return w;
+    }
+
 	public void show (Graphics g, int x, int y)
 	{
 		for(int i=0;i<h;i++)
