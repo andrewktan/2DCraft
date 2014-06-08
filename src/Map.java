@@ -16,7 +16,7 @@ public class Map {
 	{	
 		//parse in images
 		initialize();
-		h=32;
+		h=100;
 		w=width;
 		//space created
 		twodarray= new Tile[h][width];
@@ -38,6 +38,7 @@ public class Map {
 		//left to right, varying elevation
 		for(int i=0;i<width;i++)
 		{
+			//dirt and stone generation
 			//weighted randomly increase or decrease
 			double randchange=Math.random()*10;
 			int dirtchange=0;
@@ -59,7 +60,6 @@ public class Map {
 			else{
 				//don't do anything
 			}
-			
 			//adjusting for elevation
 			double randhchange=Math.random()*netchange;
 			if(randhchange>h/8)
@@ -79,22 +79,45 @@ public class Map {
 			}
 			stoneend=stoneend+stonechange;
 			dirtend=dirtend+dirtchange;
-			
-			
-			
 			for(int j=h-1;j>stoneend;j--)
 			{
 				twodarray[j][i]=new Tile(3,baseimages[3]);
 			}
 			for(int j=stoneend;j>dirtend;j--)
 			{
+				try{
 				twodarray[j][i]=new Tile(1,baseimages[1]);
+				}
+				catch(Exception e)
+				{
+					System.out.println("j"+j+"i"+i);
+				}
 			}
 			//grass layer
 			twodarray[dirtend][i]=new Tile(2,baseimages[2]);
 			//bedrock layer
 			twodarray[h-1][i]=new Tile(6,baseimages[6]);
 		}
+		
+		//forest generation
+		int forestnum=(int) (Math.random()*w/25)+1;
+		int[] foreststarts=new int[forestnum];
+		int[] forestsize=new int[forestnum];
+		
+		foreststarts[0]=w/forestnum+(int) (Math.random()*5);
+		forestsize[0]=(int)(Math.random()*30)+20;
+		for(int k=1;k<forestnum;k++)
+		{
+			foreststarts[k]=(k)*w/forestnum+(int)(Math.random()*30)-15;
+			forestsize[k]=(int)(Math.random()*30)+10;
+		}
+		
+		for(int i=0;i<forestnum;i++)
+		{
+			//System.out.println(foreststarts[i]+"size"+forestsize[i]);
+		}
+		
+		
 	}
 
 	public void initialize()
@@ -148,7 +171,6 @@ public class Map {
 		File towrite=new File("resources/"+fname+".txt");
 		try {
 			PrintWriter goin= new PrintWriter(towrite);
-			
 			for(int i=0;i<h;i++)
 			{
 				for(int j=0;j<w;j++)
@@ -157,8 +179,8 @@ public class Map {
 				}
 				goin.println("");
 			}
+			goin.close();
 		} catch (IOException e) {
-			
 		}
 				
 	}
@@ -186,18 +208,7 @@ public class Map {
     public int getWidth() {
         return w;
     }
-
-	public void show (Graphics g, int x, int y)
-	{
-		for(int i=0;i<h;i++)
-		{
-			for(int j=0;j<w;j++)
-			{
-				twodarray[i][j].show(g, j*16+x, i*16+y);
-			}
-		}
-	}
-
+    
 	public Image getImage(int x,int y)
 	{
 		return twodarray[y][x].getDisplaypic();
