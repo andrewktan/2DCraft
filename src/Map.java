@@ -24,7 +24,7 @@ public class Map {
 		{
 			for(int j=0;j<w;j++)
 			{
-				twodarray[i][j]=new Tile(0,baseimages[0]);
+				twodarray[i][j]=new Tile(0,baseimages[0],false);
 			}
 		}
 		//stone and dirts
@@ -120,11 +120,6 @@ public class Map {
 			foreststarts[k]=(k+1)*w/(forestnum+1)+(int)(Math.random()*30)-15;
 			forestsize[k]=(int)(Math.random()*20)+20;
 			treenum[k]=forestsize[k]/8+(int)(Math.random()*3)-1;
-		}
-		
-		for(int i=0;i<forestnum;i++)
-		{
-			System.out.println("start"+foreststarts[i]+"size"+forestsize[i]+"num"+treenum[i]);
 		}
 		
 		//actual generation
@@ -250,4 +245,8 @@ public class Map {
 		}
 		return h-1;
 	}
+
+    public boolean isSolid(int x, int y) {
+        return twodarray[y][x].isSolid();
+    }
 }

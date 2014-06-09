@@ -7,6 +7,8 @@ import java.io.IOException;
 
 public class Player implements KeyListener, Runnable {
 
+    Map map; // temporary map
+
     // variables to fix issue with key release
     private boolean released = false;
 
@@ -16,15 +18,19 @@ public class Player implements KeyListener, Runnable {
     // position and velocity variables
     private double rx = 0, ry = 0, vx = 0, vy = 0;
 
+    // field of view
+    private double fx, fy;
+
     // images
     private Image left, right, still;
 
     /**
      * Default constructor for player
      */
-    public Player() {
+    public Player(Map map) {
         loadImages();
         new Thread(this).start();
+        this.map = map;
     }
 
     /**
@@ -77,6 +83,22 @@ public class Player implements KeyListener, Runnable {
     }
 
     /**
+     * Accessor for field of view x
+     * @return
+     */
+    public double getFx() {
+        return fx;
+    }
+
+    /**
+     * Accessor for field of view y
+     * @return
+     */
+    public double getFy() {
+        return fy;
+    }
+
+    /**
      * Part of the KeyListener interface
      * @param e
      */
@@ -99,7 +121,7 @@ public class Player implements KeyListener, Runnable {
                 break;
             case KeyEvent.VK_UP:
                 if (!inAir)
-                    vy = -8;
+                    vy = -8; // hops
                 break;
         }
     }
@@ -131,8 +153,8 @@ public class Player implements KeyListener, Runnable {
 
             // y direction
             ry += vy * (double) timestep / 1000; // update y-pos
-
-            if ((int) ry <= 20) {
+            System.out.println((int)ry);
+            if (!map.isSolid((int)rx, (int)ry+96)) {
                 vy += 20 * (double) timestep / 1000; // gravity
                 inAir = true;
             } else {

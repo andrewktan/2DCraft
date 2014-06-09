@@ -9,13 +9,26 @@ public class MainGui extends JFrame{
 
 	public MainGui(int w)
 	{
+        // declare and initialize
 		mainmap = new Map (w);
-        player = new Player();
-        MapPanel mp = new MapPanel(mainmap, player);
+        player = new Player(mainmap);
+        MapPanel mp = new MapPanel(mainmap);
+        PlayerPanel pp = new PlayerPanel(player);
+        pp.setOpaque(false);
 
+        // add to panel
+        add(mp, 0);
+        add(pp, 0);
+
+        // position and size panels
+        Insets insets = getInsets();
+        mp.setBounds(insets.left, insets.top, 1024, 512);
+        pp.setBounds(insets.left, insets.top, 1024, 512);
+
+        // JFrame options
+        setLayout(null);
         setSize(1024, 512);
         setResizable(false);
-        setContentPane(mp);
         setVisible(true);
         setFocusable(true);
         addKeyListener(player);

@@ -7,13 +7,22 @@ import java.util.*;
 
 public class Tile {
 	private int id;
+    private boolean solid;
 	private Image displaypic;
 
 	public Tile(int tileid, Image display)
 	{
 		displaypic=display;
 		id=tileid;
+        solid = true;
 	}
+
+    public Tile(int tileid, Image display, boolean solid)
+    {
+        displaypic=display;
+        id=tileid;
+        this.solid = solid;
+    }
 
 	public Image getDisplaypic() {
 		return displaypic;
@@ -35,5 +44,9 @@ public class Tile {
 	public void setId(int id) {
 		this.id = id;
 	}
+
+    public boolean isSolid() {
+        return solid;
+    }
 
 }
