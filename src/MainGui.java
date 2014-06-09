@@ -1,5 +1,7 @@
 import javax.swing.*;
+
 import java.awt.*;
+import java.awt.event.KeyListener;
 public class MainGui extends JFrame{
 
 	Map mainmap;

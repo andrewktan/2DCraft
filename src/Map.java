@@ -16,7 +16,7 @@ public class Map {
 	{	
 		//parse in images
 		initialize();
-		h=32;
+		h=256;
 		w=width;
 		//space created
 		twodarray= new Tile[h][width];
@@ -29,8 +29,8 @@ public class Map {
 		}
 		//stone and dirts
 		//initial elevations
-		int stoneend=(int)(Math.random()*3)+3*h/4;
-		int dirtend= (int)(stoneend-(Math.random()*2+4));
+		int stoneend=(int)(Math.random()*3)+h/2;
+		int dirtend= (int)(stoneend-(Math.random()*2+3));
 		//keeping track of changes
 		int netchange=0;
 		char updown='n';
@@ -38,6 +38,7 @@ public class Map {
 		//left to right, varying elevation
 		for(int i=0;i<width;i++)
 		{
+			//dirt and stone generation
 			//weighted randomly increase or decrease
 			double randchange=Math.random()*10;
 			int dirtchange=0;
@@ -59,7 +60,6 @@ public class Map {
 			else{
 				//don't do anything
 			}
-			
 			//adjusting for elevation
 			double randhchange=Math.random()*netchange;
 			if(randhchange>h/8)
@@ -79,22 +79,70 @@ public class Map {
 			}
 			stoneend=stoneend+stonechange;
 			dirtend=dirtend+dirtchange;
-			
-			
-			
 			for(int j=h-1;j>stoneend;j--)
 			{
 				twodarray[j][i]=new Tile(3,baseimages[3]);
 			}
 			for(int j=stoneend;j>dirtend;j--)
 			{
+				try{
 				twodarray[j][i]=new Tile(1,baseimages[1]);
+				}
+				catch(Exception e)
+				{
+					System.out.println("j"+j+"i"+i);
+				}
 			}
 			//grass layer
 			twodarray[dirtend][i]=new Tile(2,baseimages[2]);
 			//bedrock layer
 			twodarray[h-1][i]=new Tile(6,baseimages[6]);
 		}
+		
+		//forest generation
+		//Given a map is of size "n", the best way to equally space a number of forests "m"
+		//is to start them roughly at locations of n/(m+1)*index of forest
+		//technically the center should be at that location, but as map size
+		//increases, relative error goes down so its okay
+		
+		//determining initial values
+		int forestnum=(int) (Math.random()*w/100)+2; 						//number of forests
+		int[] foreststarts=new int[forestnum];								//start location of forest
+		int[] forestsize=new int[forestnum];								//"area" of forest
+		int[] treenum=new int [forestnum];									//number of trees in a forest
+		
+		foreststarts[0]=w/(forestnum+1)+(int) (Math.random()*5);			//first forest start location
+		forestsize[0]=(int)(Math.random()*20)+20;							//first forest size
+		treenum[0]=forestsize[0]/8+(int)(Math.random()*5)-2;				//number of trees based on forest size
+		
+		for(int k=1;k<forestnum;k++)
+		{
+			foreststarts[k]=(k+1)*w/(forestnum+1)+(int)(Math.random()*30)-15;
+			forestsize[k]=(int)(Math.random()*20)+20;
+			treenum[k]=forestsize[k]/8+(int)(Math.random()*3)-1;
+		}
+		
+		for(int i=0;i<forestnum;i++)
+		{
+			System.out.println("start"+foreststarts[i]+"size"+forestsize[i]+"num"+treenum[i]);
+		}
+		
+		//actual generation
+		for(int i=0;i<forestnum;i++)
+		{			
+			for(int j=0;j<treenum[i];j++)
+			{
+				int xloc=foreststarts[i]+j*8+(int)(Math.random()*3)-1;
+				for(int k=0;k<(int)(Math.random()*3)+4;k++)
+				{
+					int surface=getSurface(xloc);
+					twodarray[surface-k][xloc].setId(4);
+				}
+			}
+		}
+		
+		
+		
 	}
 
 	public void initialize()
@@ -148,7 +196,6 @@ public class Map {
 		File towrite=new File("resources/"+fname+".txt");
 		try {
 			PrintWriter goin= new PrintWriter(towrite);
-			
 			for(int i=0;i<h;i++)
 			{
 				for(int j=0;j<w;j++)
@@ -157,8 +204,8 @@ public class Map {
 				}
 				goin.println("");
 			}
+			goin.close();
 		} catch (IOException e) {
-			
 		}
 				
 	}
@@ -186,20 +233,21 @@ public class Map {
     public int getWidth() {
         return w;
     }
-
-	public void show (Graphics g, int x, int y)
-	{
-		for(int i=0;i<h;i++)
-		{
-			for(int j=0;j<w;j++)
-			{
-				twodarray[i][j].show(g, j*16+x, i*16+y);
-			}
-		}
-	}
-
+    
 	public Image getImage(int x,int y)
 	{
 		return twodarray[y][x].getDisplaypic();
+	}
+	
+	public int getSurface(int x)
+	{
+		for(int i=0;i<h-1;i++)
+		{
+			if(twodarray[i][x].getId()!=0)
+			{
+				return i;
+			}
+		}
+		return h-1;
 	}
 }
