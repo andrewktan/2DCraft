@@ -5,7 +5,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
 
-public class Player implements KeyListener {
+public class Player implements KeyListener, Runnable {
+
+    // variables to fix issue with key release
+    private boolean released = false;
+
+    // other flags
+    private boolean inAir = false;
 
     // position and velocity variables
     private double rx = 0, ry = 0, vx = 0, vy = 0;
@@ -18,6 +24,7 @@ public class Player implements KeyListener {
      */
     public Player() {
         loadImages();
+        new Thread(this).start();
     }
 
     /**
@@ -29,6 +36,7 @@ public class Player implements KeyListener {
         loadImages();
         this.rx = rx;
         this.ry = ry;
+        new Thread(this).start();
     }
 
     /**
@@ -52,11 +60,17 @@ public class Player implements KeyListener {
      */
     public void show(Graphics g) {
         // calculate position in terms of pixels
-        int posx = (int) rx*15;
-        int posy = (int) ry*15;
+        int posx = (int) (rx*15);
+        int posy = (int) (ry*15);
 
         // choose image
-        Image player = (vx > 0) ? right : left;
+        Image player;
+        if (vx > 0)
+            player = right;
+        else if (vx < 0)
+            player = left;
+        else
+            player = still;
 
         // draw image
         g.drawImage(player, posx, posy, null);
@@ -75,7 +89,19 @@ public class Player implements KeyListener {
      * @param e
      */
     public void keyPressed(KeyEvent e) {
-
+        released = false;
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_LEFT:
+                vx = -5;
+                break;
+            case KeyEvent.VK_RIGHT:
+                vx = 5;
+                break;
+            case KeyEvent.VK_UP:
+                if (!inAir)
+                    vy = -8;
+                break;
+        }
     }
 
     /**
@@ -83,6 +109,42 @@ public class Player implements KeyListener {
      * @param e
      */
     public void keyReleased(KeyEvent e) {
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_LEFT:
+            case KeyEvent.VK_RIGHT:
+                    released = true;
+                break;
+        }
+    }
 
+    /**
+     * Physics thread
+     */
+    public void run() {
+        int timestep = 33; // in ms
+        while(true) {
+            if (released) {
+                vx = 0;
+            }
+            // x direction
+            rx += vx * (double) timestep / 1000; // update x-pos
+
+            // y direction
+            ry += vy * (double) timestep / 1000; // update y-pos
+
+            if ((int) ry <= 20) {
+                vy += 20 * (double) timestep / 1000; // gravity
+                inAir = true;
+            } else {
+                vy = 0; // floor
+                inAir = false;
+            }
+
+            try {
+                Thread.sleep(timestep); // 30Hz refresh rate
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
