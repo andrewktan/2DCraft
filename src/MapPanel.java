@@ -4,9 +4,11 @@ import java.awt.*;
 public class MapPanel extends JPanel {
 
     Map map;
+    Player player;
 
-    public MapPanel(Map map) {
+    public MapPanel(Map map, Player player) {
         this.map = map;
+        this.player = player;
     }
 
     public void paint(Graphics g) {
@@ -19,5 +21,7 @@ public class MapPanel extends JPanel {
             }
         }
         System.out.println("You should see something now");
+
+        player.show(g);
     }
 }

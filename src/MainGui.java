@@ -7,7 +7,8 @@ public class MainGui extends JFrame{
 	public MainGui(int w)
 	{
 		mainmap = new Map (w);
-        MapPanel mp = new MapPanel(mainmap);
+
+        MapPanel mp = new MapPanel(mainmap, new Player());
 
         setSize(1024, 512);
         setResizable(false);
