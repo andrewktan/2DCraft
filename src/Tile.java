@@ -1,49 +1,41 @@
 import java.awt.*;
-import java.io.*;
-
-import javax.imageio.ImageIO;
-
-import java.util.*;
 
 public class Tile {
-	private int id;
+    private int id;
     private boolean solid;
-	private Image displaypic;
+    private Image displaypic;
 
-	public Tile(int tileid, Image display)
-	{
-		displaypic=display;
-		id=tileid;
+    public Tile(int tileid, Image display) {
+        displaypic = display;
+        id = tileid;
         solid = true;
-	}
+    }
 
-    public Tile(int tileid, Image display, boolean solid)
-    {
-        displaypic=display;
-        id=tileid;
+    public Tile(int tileid, Image display, boolean solid) {
+        displaypic = display;
+        id = tileid;
         this.solid = solid;
     }
 
-	public Image getDisplaypic() {
-		return displaypic;
-	}
+    public Image getDisplaypic() {
+        return displaypic;
+    }
 
-	public void setDisplaypic(Image displaypic) {
-		this.displaypic = displaypic;
-	}
+    public void setDisplaypic(Image displaypic) {
+        this.displaypic = displaypic;
+    }
 
-	public void show (Graphics g, int x, int y)
-	{
-		g.drawImage(displaypic, x, y, null);
-	}
+    public void show(Graphics g, int x, int y) {
+        g.drawImage(displaypic, x, y, null);
+    }
 
-	public int getId() {
-		return id;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public boolean isSolid() {
         return solid;

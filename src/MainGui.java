@@ -1,16 +1,14 @@
 import javax.swing.*;
-
 import java.awt.*;
-import java.awt.event.KeyListener;
-public class MainGui extends JFrame{
 
-	Map mainmap;
+public class MainGui extends JFrame {
+
+    Map mainmap;
     Player player;
 
-	public MainGui(int w)
-	{
+    public MainGui(int w) {
         // declare and initialize
-		mainmap = new Map (w);
+        mainmap = new Map(w);
         player = new Player(mainmap);
         MapPanel mp = new MapPanel(mainmap);
         PlayerPanel pp = new PlayerPanel(player);
@@ -34,5 +32,5 @@ public class MainGui extends JFrame{
         addKeyListener(player);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-	}
+    }
 }

@@ -1,5 +1,4 @@
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -35,6 +34,7 @@ public class Player implements KeyListener, Runnable {
 
     /**
      * Constructor given starting position
+     *
      * @param rx
      * @param ry
      */
@@ -54,20 +54,21 @@ public class Player implements KeyListener, Runnable {
             left = ImageIO.read(getClass().getResource("resources/pl.png"));
             right = ImageIO.read(getClass().getResource("resources/pr.png"));
             still = ImageIO.read(getClass().getResource("resources/ps.png"));
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     /**
      * Add player to JPanel
+     *
      * @param g
      * @return
      */
     public void show(Graphics g) {
         // calculate position in terms of pixels
-        int posx = (int) (rx*15);
-        int posy = (int) (ry*15);
+        int posx = (int) (rx * 15);
+        int posy = (int) (ry * 15);
 
         // choose image
         Image player;
@@ -84,6 +85,7 @@ public class Player implements KeyListener, Runnable {
 
     /**
      * Accessor for field of view x
+     *
      * @return
      */
     public double getFx() {
@@ -92,6 +94,7 @@ public class Player implements KeyListener, Runnable {
 
     /**
      * Accessor for field of view y
+     *
      * @return
      */
     public double getFy() {
@@ -100,6 +103,7 @@ public class Player implements KeyListener, Runnable {
 
     /**
      * Part of the KeyListener interface
+     *
      * @param e
      */
     public void keyTyped(KeyEvent e) {
@@ -108,6 +112,7 @@ public class Player implements KeyListener, Runnable {
 
     /**
      * Part of the KeyListener interface
+     *
      * @param e
      */
     public void keyPressed(KeyEvent e) {
@@ -128,13 +133,14 @@ public class Player implements KeyListener, Runnable {
 
     /**
      * Part of the KeyListener interface
+     *
      * @param e
      */
     public void keyReleased(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_LEFT:
             case KeyEvent.VK_RIGHT:
-                    released = true;
+                released = true;
                 break;
         }
     }
@@ -144,7 +150,7 @@ public class Player implements KeyListener, Runnable {
      */
     public void run() {
         int timestep = 33; // in ms
-        while(true) {
+        while (true) {
             if (released) {
                 vx = 0;
             }
@@ -153,8 +159,8 @@ public class Player implements KeyListener, Runnable {
 
             // y direction
             ry += vy * (double) timestep / 1000; // update y-pos
-            System.out.println((int)ry);
-            if (!map.isSolid((int)rx, (int)ry+96)) {
+            System.out.println((int) ry);
+            if (!map.isSolid((int) rx, (int) ry + 96)) {
                 vy += 20 * (double) timestep / 1000; // gravity
                 inAir = true;
             } else {

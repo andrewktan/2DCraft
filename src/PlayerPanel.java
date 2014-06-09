@@ -13,6 +13,7 @@ public class PlayerPanel extends JPanel implements Runnable {
         super.paintComponent(g);
         player.show(g);
     }
+
     public void run() {
         while (true) {
             // refresh display at 30Hz
