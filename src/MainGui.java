@@ -10,7 +10,7 @@ public class MainGui extends JFrame {
         // declare and initialize
         mainmap = new Map(w);
         player = new Player(mainmap);
-        MapPanel mp = new MapPanel(mainmap);
+        MapPanel mp = new MapPanel(mainmap, player);
         PlayerPanel pp = new PlayerPanel(player);
         pp.setOpaque(false);
 
@@ -20,8 +20,8 @@ public class MainGui extends JFrame {
 
         // position and size panels
         Insets insets = getInsets();
-        mp.setBounds(insets.left, insets.top, 1024, 512);
-        pp.setBounds(insets.left, insets.top, 1024, 512);
+        mp.setBounds(0, 0, 1024, 512);
+        pp.setBounds(0, 0, 1024, 512);
 
         // JFrame options
         setLayout(null);

@@ -15,10 +15,10 @@ public class Player implements KeyListener, Runnable {
     private boolean inAir = false;
 
     // position and velocity variables
-    private double rx = 0, ry = 0, vx = 0, vy = 0;
+    private double rx = 500, ry = 96, vx = 0, vy = 0;
 
     // field of view
-    private double fx, fy;
+    private double fx = 500, fy = 100;
 
     // images
     private Image left, right, still;
@@ -67,9 +67,8 @@ public class Player implements KeyListener, Runnable {
      */
     public void show(Graphics g) {
         // calculate position in terms of pixels
-        int posx = (int) (rx * 15);
-        int posy = (int) (ry * 15);
-
+        int posx = (int) ((rx - fx) * 15);
+        int posy = (int) ((ry - fy) * 15);
         // choose image
         Image player;
         if (vx > 0)
@@ -155,18 +154,34 @@ public class Player implements KeyListener, Runnable {
                 vx = 0;
             }
             // x direction
-            rx += vx * (double) timestep / 1000; // update x-pos
+            if (!map.isSolid((int) rx, (int) ry)) {
+                rx += vx * (double) timestep / 1000; // update x-pos
+            } else {
+                rx = Math.floor(rx); // stop movement
+            }
 
             // y direction
             ry += vy * (double) timestep / 1000; // update y-pos
-            System.out.println((int) ry);
-            if (!map.isSolid((int) rx, (int) ry + 96)) {
+            if (!map.isSolid((int) rx, (int) ry)) {
                 vy += 20 * (double) timestep / 1000; // gravity
                 inAir = true;
             } else {
+                ry = Math.floor(ry); // bring to top of block
                 vy = 0; // floor
                 inAir = false;
             }
+
+            // pan camera
+            // x-direction
+            if (rx - fx < 10)
+                fx -= 0.5;
+            else if ((fx + 64) - rx < 10)
+                fx += 0.5;
+            // y-direction
+            if (ry - fy < 10)
+                fy -= 0.5;
+            else if ((fy + 32) - ry < 10)
+                fy += 0.5;
 
             try {
                 Thread.sleep(timestep); // 30Hz refresh rate
