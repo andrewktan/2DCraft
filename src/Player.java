@@ -154,15 +154,16 @@ public class Player implements KeyListener, Runnable {
                 vx = 0;
             }
             // x direction
-            if (!map.isSolid((int) rx, (int) ry)) {
+            if (!map.isSolid((int) (rx + (vx * timestep / 1000)), (int) ry)) {
                 rx += vx * (double) timestep / 1000; // update x-pos
             } else {
-                rx = Math.floor(rx); // stop movement
+                rx = Math.round(rx); // stop movement <FIX>
+                vx = 0;
             }
 
             // y direction
             ry += vy * (double) timestep / 1000; // update y-pos
-            if (!map.isSolid((int) rx, (int) ry)) {
+            if (!map.isSolid((int) rx, (int) Math.floor(ry + 1))) {
                 vy += 20 * (double) timestep / 1000; // gravity
                 inAir = true;
             } else {
@@ -172,16 +173,23 @@ public class Player implements KeyListener, Runnable {
             }
 
             // pan camera
+            double vx_pan = 0, vy_pan = 0;
             // x-direction
             if (rx - fx < 10)
-                fx -= 0.5;
+                vx_pan = -(Math.abs(vx) + 1);
             else if ((fx + 64) - rx < 10)
-                fx += 0.5;
+                vx_pan = Math.abs(vx) + 1;
+            else
+                vx_pan = 0;
+            fx += vx_pan * (double) timestep / 1000;
+
             // y-direction
             if (ry - fy < 10)
-                fy -= 0.5;
+                vy_pan = -(Math.abs(vy) + 1);
             else if ((fy + 32) - ry < 10)
-                fy += 0.5;
+                vy_pan = Math.abs(vy) + 1;
+
+            fy += vy_pan * (double) timestep / 1000;
 
             try {
                 Thread.sleep(timestep); // 30Hz refresh rate

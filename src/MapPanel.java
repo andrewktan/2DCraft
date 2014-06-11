@@ -20,12 +20,15 @@ public class MapPanel extends JPanel implements Runnable {
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        int fx = (int) player.getFx();
-        int fy = (int) player.getFy();
+        double fx = player.getFx();
+        double fy = player.getFy();
         //looping across the array to display images
-        for (int h = fy; h < fy + 32; h++) {
-            for (int x = fx; x < fx + 64; x++) {
-                g.drawImage(twodarray[h][x].getDisplaypic(), (x - fx) * 16, (h - fy) * 16, null);
+        for (int h = (int) fy; h < (int) fy + 32 + 1; h++) {
+            for (int x = (int) fx; x < (int) fx + 64 + 1; x++) {
+                g.drawImage(twodarray[h][x].getDisplaypic(),
+                        (int)((x - fx) * 16),
+                        (int)((h - fy) * 16),
+                        null);
             }
         }
     }
