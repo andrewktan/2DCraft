@@ -16,6 +16,7 @@ public class Player implements KeyListener, Runnable {
 
     // position and velocity variables
     private double rx = 500, ry = 96, vx = 0, vy = 0;
+    private double move_vx = 7, jump_vy = 8;
 
     // field of view
     private double fx = 500, fy = 100;
@@ -51,9 +52,9 @@ public class Player implements KeyListener, Runnable {
     private void loadImages() {
         try {
             // load player images
-        	 left = ImageIO.read(getClass().getResource("pl.png"));
-             right = ImageIO.read(getClass().getResource("pr.png"));
-             still = ImageIO.read(getClass().getResource("ps.png"));
+        	 left = ImageIO.read(getClass().getResource("resources/pl.png"));
+             right = ImageIO.read(getClass().getResource("resources/pr.png"));
+             still = ImageIO.read(getClass().getResource("resources/ps.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -118,14 +119,14 @@ public class Player implements KeyListener, Runnable {
         released = false;
         switch (e.getKeyCode()) {
             case KeyEvent.VK_LEFT:
-                vx = -5;
+                vx = -move_vx;
                 break;
             case KeyEvent.VK_RIGHT:
-                vx = 5;
+                vx = move_vx;
                 break;
             case KeyEvent.VK_UP:
                 if (!inAir)
-                    vy = -8; // hops
+                    vy = -jump_vy; // hops
                 break;
         }
     }
@@ -154,7 +155,10 @@ public class Player implements KeyListener, Runnable {
                 vx = 0;
             }
             // x direction
-            if (!map.isSolid((int) (rx + (vx * timestep / 1000)), (int) ry)) {
+            //if (!map.isSolid((int) (rx + (vx * timestep / 1000)), (int) ry)) {
+
+            System.out.printf("Actual (%f, %f)\n", rx, ry);
+            if (!map.isSolid((int) rx, (int) ry)) {
                 rx += vx * (double) timestep / 1000; // update x-pos
             } else {
                 rx = Math.round(rx); // stop movement <FIX>
@@ -183,13 +187,23 @@ public class Player implements KeyListener, Runnable {
                 vx_pan = 0;
             fx += vx_pan * (double) timestep / 1000;
 
+            if (fx < 0)
+                fx = 0;
+            else if (fx + 64 > map.getWidth())
+                fx = map.getWidth() - 64 - 1;
+
             // y-direction
             if (ry - fy < 10)
-                vy_pan = -(Math.abs(vy) + 1);
+                vy_pan = -(Math.abs(vy) + 5);
             else if ((fy + 32) - ry < 10)
-                vy_pan = Math.abs(vy) + 1;
+                vy_pan = Math.abs(vy) + 5;
 
             fy += vy_pan * (double) timestep / 1000;
+
+            if (fy < 0)
+                fy = 0;
+            else if (fy + 32 > map.getHeight())
+                fy = map.getHeight() - 32 - 1;
 
             try {
                 Thread.sleep(timestep); // 30Hz refresh rate

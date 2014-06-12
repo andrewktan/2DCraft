@@ -147,11 +147,11 @@ public class Map {
 					{
 						if(Math.sqrt((double)(Math.pow((double)(y-topy),2)+Math.pow((double)(x-centerx), 2)))<(double)(leafradius))
 								{
-								twodarray[y][x]=new Tile(5,baseimages[5]);
+								twodarray[y][x]=new Tile(5,baseimages[5], false);
 								}
 					}
 				}
-				twodarray[topy-1][centerx]=new Tile(5,baseimages[5]);
+				twodarray[topy-1][centerx]=new Tile(5,baseimages[5], false);
 				
 				//log generation
 				for (int k = 0; k < height; k++) {
@@ -258,6 +258,10 @@ public int getSurface(int x) {
 }
 
 public boolean isSolid(int x, int y) {
-	return twodarray[y][x].isSolid();
+    System.out.printf("(%d, %d)\n", x, y);
+    if (x < 0 || x > w || y < 0 || y > h)
+        return true;
+    else
+        return twodarray[y][x].isSolid();
 }
 }
