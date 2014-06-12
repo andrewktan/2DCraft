@@ -258,13 +258,26 @@ public int getSurface(int x) {
 }
 
 public void removeBlock(int x, int y) {
-    twodarray[y][x] = new Tile(0, baseimages[0], false);
+    if (isValid(x, y))
+        twodarray[y][x] = new Tile(0, baseimages[0], false);
 }
 
+public void placeBlock(int x, int y, int n, boolean solid) {
+    if (isValid(x, y)) {
+        twodarray[y][x] = new Tile(n, baseimages[n], solid);
+    }
+}
+
+
 public boolean isSolid(int x, int y) {
-    if (x < 0 || x > w || y < 0 || y > h)
-        return true;
-    else
+    if (isValid(x, y))
         return twodarray[y][x].isSolid();
+    else
+        return true;
+
+}
+
+protected boolean isValid(int x, int y) {
+    return !(x < 0 || x > w || y < 0 || y > h);
 }
 }
