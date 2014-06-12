@@ -257,8 +257,11 @@ public int getSurface(int x) {
 	return h - 1;
 }
 
+public void removeBlock(int x, int y) {
+    twodarray[y][x] = new Tile(0, baseimages[0], false);
+}
+
 public boolean isSolid(int x, int y) {
-    System.out.printf("(%d, %d)\n", x, y);
     if (x < 0 || x > w || y < 0 || y > h)
         return true;
     else

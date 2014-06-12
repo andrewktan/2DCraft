@@ -1,4 +1,5 @@
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -68,8 +69,8 @@ public class Player implements KeyListener, Runnable {
      */
     public void show(Graphics g) {
         // calculate position in terms of pixels
-        int posx = (int) ((rx - fx) * 15);
-        int posy = (int) ((ry - fy) * 15);
+        int posx = (int) ((rx - fx) * 16);
+        int posy = (int) ((ry - fy) * 16);
         // choose image
         Image player;
         if (vx > 0)
@@ -102,6 +103,22 @@ public class Player implements KeyListener, Runnable {
     }
 
     /**
+     * Accessor for position in x
+     * @return
+     */
+    public double getRx() {
+        return rx;
+    }
+
+    /**
+     * Accessor for position in y
+     * @return
+     */
+    public double getRy() {
+        return ry;
+    }
+
+    /**
      * Part of the KeyListener interface
      *
      * @param e
@@ -127,6 +144,9 @@ public class Player implements KeyListener, Runnable {
             case KeyEvent.VK_UP:
                 if (!inAir)
                     vy = -jump_vy; // hops
+                break;
+            case KeyEvent.VK_SPACE:
+                map.removeBlock((int) rx, (int) ry + 2);
                 break;
         }
     }
@@ -156,9 +176,7 @@ public class Player implements KeyListener, Runnable {
             }
             // x direction
             //if (!map.isSolid((int) (rx + (vx * timestep / 1000)), (int) ry)) {
-
-            System.out.printf("Actual (%f, %f)\n", rx, ry);
-            if (!map.isSolid((int) rx, (int) ry)) {
+            if (!map.isSolid((int) rx, (int) ry + 1)) {
                 rx += vx * (double) timestep / 1000; // update x-pos
             } else {
                 rx = Math.round(rx); // stop movement <FIX>
@@ -167,7 +185,7 @@ public class Player implements KeyListener, Runnable {
 
             // y direction
             ry += vy * (double) timestep / 1000; // update y-pos
-            if (!map.isSolid((int) rx, (int) Math.floor(ry + 1))) {
+            if (!map.isSolid((int) rx, (int) (ry + 2))) {
                 vy += 20 * (double) timestep / 1000; // gravity
                 inAir = true;
             } else {
