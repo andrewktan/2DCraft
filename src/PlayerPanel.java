@@ -1,11 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 public class PlayerPanel extends JPanel implements Runnable {
     Player player;
     JLabel coord = new JLabel();
+
     public PlayerPanel(Player player) {
         this.player = player;
         new Thread(this).start(); // run thread

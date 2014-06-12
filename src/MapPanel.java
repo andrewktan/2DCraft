@@ -31,8 +31,8 @@ public class MapPanel extends JPanel implements Runnable, MouseListener, KeyList
         for (int y = (int) fy; y < (int) fy + 32 + 1; y++) {
             for (int x = (int) fx; x < (int) fx + 64 + 1; x++) {
                 g.drawImage(twodarray[y][x].getDisplaypic(),
-                        (int)((x - fx) * 16),
-                        (int)((y - fy) * 16),
+                        (int) ((x - fx) * 16),
+                        (int) ((y - fy) * 16),
                         null);
             }
         }
@@ -77,7 +77,9 @@ public class MapPanel extends JPanel implements Runnable, MouseListener, KeyList
     public void keyReleased(KeyEvent e) {
     }
 
-    /** MouseListener Methods **/
+    /**
+     * MouseListener Methods *
+     */
 
     public void mousePressed(MouseEvent e) {
     }
@@ -94,8 +96,8 @@ public class MapPanel extends JPanel implements Runnable, MouseListener, KeyList
     public void mouseClicked(MouseEvent e) {
         Point p = e.getLocationOnScreen();
 
-        int x = (int) Math.round(player.getFx() + ((p.getX())/ 16));
-        int y = (int) Math.round(player.getFy() + ((p.getY() - 60)/ 16));
+        int x = (int) Math.round(player.getFx() + ((p.getX()) / 16));
+        int y = (int) Math.round(player.getFy() + ((p.getY() - 60) / 16));
         map.placeBlock(x, y, 0, false);
     }
 }

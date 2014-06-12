@@ -1,5 +1,4 @@
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -53,9 +52,9 @@ public class Player implements KeyListener, Runnable {
     private void loadImages() {
         try {
             // load player images
-        	 left = ImageIO.read(getClass().getResource("resources/pl.png"));
-             right = ImageIO.read(getClass().getResource("resources/pr.png"));
-             still = ImageIO.read(getClass().getResource("resources/ps.png"));
+            left = ImageIO.read(getClass().getResource("resources/pl.png"));
+            right = ImageIO.read(getClass().getResource("resources/pr.png"));
+            still = ImageIO.read(getClass().getResource("resources/ps.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -104,6 +103,7 @@ public class Player implements KeyListener, Runnable {
 
     /**
      * Accessor for position in x
+     *
      * @return
      */
     public double getRx() {
@@ -112,6 +112,7 @@ public class Player implements KeyListener, Runnable {
 
     /**
      * Accessor for position in y
+     *
      * @return
      */
     public double getRy() {
