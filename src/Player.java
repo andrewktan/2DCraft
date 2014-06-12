@@ -134,27 +134,16 @@ public class Player implements KeyListener, Runnable {
      */
     public void keyPressed(KeyEvent e) {
         released = false;
-        // check if it's a number
-        if (e.getKeyChar() > '0' && e.getKeyChar() < '9')
-            map.placeBlock((int) Math.round(rx),
-                    (int) Math.round(ry + 2),
-                    (int) e.getKeyChar() - 48, // get numerical value
-                    !e.isAltDown());
-        // check other keys
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_LEFT:
+            case KeyEvent.VK_A:
                 vx = -move_vx;
                 break;
-            case KeyEvent.VK_RIGHT:
+            case KeyEvent.VK_D:
                 vx = move_vx;
                 break;
-            case KeyEvent.VK_UP:
+            case KeyEvent.VK_W:
                 if (!inAir)
                     vy = -jump_vy; // hops
-                break;
-            case KeyEvent.VK_SPACE:
-                map.removeBlock((int) Math.round(rx),
-                        (int) Math.round(ry + 2)); // remove block below player
                 break;
         }
     }
@@ -166,8 +155,8 @@ public class Player implements KeyListener, Runnable {
      */
     public void keyReleased(KeyEvent e) {
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_LEFT:
-            case KeyEvent.VK_RIGHT:
+            case KeyEvent.VK_A:
+            case KeyEvent.VK_D:
                 released = true;
                 break;
         }
