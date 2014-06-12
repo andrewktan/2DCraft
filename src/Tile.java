@@ -40,5 +40,11 @@ public class Tile {
     public boolean isSolid() {
         return solid;
     }
+    
+    public void setType(int id, Image displaypic)
+    {
+    	this.displaypic=displaypic;
+    	this.id=id;
+    }
 
 }

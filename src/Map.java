@@ -84,6 +84,23 @@ public class Map {
 			//bedrock layer
 			twodarray[h - 1][i] = new Tile(6, baseimages[6]);
 		}
+		
+		//getting rid of the weird 1block /dip things
+		for (int i = 1; i < width-1; i++) {
+			int a=getSurface(i-1);
+			int b=getSurface(i);
+			int c=getSurface(i+1);
+			if(b-a==1 && b-c==1)
+			{
+				twodarray[b-1][i]=new Tile(2, baseimages[2]);
+				twodarray[b][i]=new Tile(1,baseimages[1]);
+			}
+			if(b-a==-1 && b-c==-1)
+			{
+				twodarray[b+1][i]=new Tile(2, baseimages[2]);
+				twodarray[b][i]=new Tile(0,baseimages[0]);
+			}
+		}
 
 		//forest generation
 		//Given a map is of size "n", the best way to equally space a number of forests "m"
@@ -92,7 +109,7 @@ public class Map {
 		//increases, relative error goes down so its okay
 
 		//determining initial values
-		int forestnum = (int) (Math.random() * w / 250) + 5;                        //number of forests
+		int forestnum = (int) (Math.random() * w / 250) + 8;                        //number of forests
 		int[] foreststarts = new int[forestnum];                                //start location of forest
 		int[] forestsize = new int[forestnum];                                //"area" of forest
 		int[] treenum = new int[forestnum];                                    //number of trees in a forest
@@ -108,27 +125,37 @@ public class Map {
 		}
 
 		//debugging
-		for(int i=0;i<forestnum;i++)
-		{
-			System.out.println("Start"+foreststarts[i]+"size"+forestsize[i]+"num"+treenum[i]);
-		}
-
-
+		//for(int i=0;i<forestnum;i++)
+		//{
+		//	System.out.println("Start"+foreststarts[i]+"size"+forestsize[i]+"num"+treenum[i]);
+		//}
 		
+		//looping per forest, per tree
 		for (int i = 0; i < forestnum; i++) {
 			for (int j = 0; j < treenum[i]; j++) {
-				//log generation
+				
+				//leaf generation parameterss
 				int centerx = foreststarts[i] + j * 8 + (int) (Math.random() * 3);
 				int surface = getSurface(centerx);
-				int height=(int) (Math.random() * 3) + 4;
-				//leaf generation
+				int height=(int) (Math.random() * 3) + 4;	
 				int topy= surface-height;
-				twodarray[topy-1][centerx].setId(5);
+				int leafradius=(int)(Math.random()*3)+4;
+				//actual generation in an area around the tree
+				for(int x=centerx-height/2;x<centerx+height/2+1;x++)
+				{
+					for(int y=topy-height/2;y<topy+height/2+1;y++)
+					{
+						if(Math.sqrt((double)(Math.pow((double)(y-topy),2)+Math.pow((double)(x-centerx), 2)))<(double)(leafradius))
+								{
+								twodarray[y][x]=new Tile(5,baseimages[5]);
+								}
+					}
+				}
+				twodarray[topy-1][centerx]=new Tile(5,baseimages[5]);
 				
-				
-				
+				//log generation
 				for (int k = 0; k < height; k++) {
-					twodarray[surface-k-1][centerx].setId(4);
+					twodarray[surface-k-1][centerx]=new Tile(4,baseimages[4]);
 				}
 			}
 		}
