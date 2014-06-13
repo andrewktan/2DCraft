@@ -84,7 +84,7 @@ public class Map {
 			//bedrock layer
 			twodarray[h - 1][i] = new Tile(6, baseimages[6]);
 		}
-		
+
 		//getting rid of the weird 1block /dip things
 		for (int i = 1; i < width-1; i++) {
 			int a=getSurface(i-1);
@@ -115,12 +115,12 @@ public class Map {
 		int[] treenum = new int[forestnum];                                    //number of trees in a forest
 
 		foreststarts[0] = w / (forestnum + 1) + (int) (Math.random() * 5);            //first forest start location
-		forestsize[0] = (int) (Math.random() * 20) + 20;                            //first forest size
+		forestsize[0] = (int) (Math.random() * 20) + 30;                            //first forest size
 		treenum[0] = forestsize[0] / 8 + (int) (Math.random() * 5) - 2;                //number of trees based on forest size
 
 		for (int k = 1; k < forestnum; k++) {
 			foreststarts[k] = (k + 1) * w / (forestnum + 1) + (int) (Math.random() * 30) - 15;
-			forestsize[k] = (int) (Math.random() * 20) + 20;
+			forestsize[k] = (int) (Math.random() * 20) + 30;
 			treenum[k] = forestsize[k] / 8 + (int) (Math.random() * 4) - 1;
 		}
 
@@ -129,30 +129,39 @@ public class Map {
 		//{
 		//	System.out.println("Start"+foreststarts[i]+"size"+forestsize[i]+"num"+treenum[i]);
 		//}
-		
+
 		//looping per forest, per tree
 		for (int i = 0; i < forestnum; i++) {
 			for (int j = 0; j < treenum[i]; j++) {
-				
+
 				//leaf generation parameterss
 				int centerx = foreststarts[i] + j * 8 + (int) (Math.random() * 3);
 				int surface = getSurface(centerx);
 				int height=(int) (Math.random() * 3) + 4;	
 				int topy= surface-height;
-				int leafradius=(int)(Math.random()*3)+4;
+				double leafradius=Math.random()*(height-3)+3;
 				//actual generation in an area around the tree
-				for(int x=centerx-height/2;x<centerx+height/2+1;x++)
+				for(int x=centerx-20;x<centerx+21;x++)
 				{
-					for(int y=topy-height/2;y<topy+height/2+1;y++)
+					for(int y=topy-20;y<topy+2;y++)
 					{
-						if(Math.sqrt((double)(Math.pow((double)(y-topy),2)+Math.pow((double)(x-centerx), 2)))<(double)(leafradius))
-								{
-								twodarray[y][x]=new Tile(5,baseimages[5], false);
-								}
+						//base generation
+						double manhattan=Math.abs(x-centerx)+Math.abs(y-topy);
+						//randomized minowski difference
+						//http://en.wikipedia.org/wiki/Minkowski_distance
+						double minowski=Math.random()*5+0.75;
+						double dist=Math.pow(Math.pow(Math.abs(x-centerx),minowski)+Math.pow(Math.abs(y-topy),minowski),1/minowski);
+						//if its less than the leafradius
+						if(manhattan<leafradius||dist<leafradius-1)
+						{
+							//if the block was previously air
+							if(!twodarray[y][x].isSolid())
+							{
+							twodarray[y][x]=new Tile(5,baseimages[5]);
+							}
+						}
 					}
 				}
-				twodarray[topy-1][centerx]=new Tile(5,baseimages[5], false);
-				
 				//log generation
 				for (int k = 0; k < height; k++) {
 					twodarray[surface-k-1][centerx]=new Tile(4,baseimages[4]);
@@ -160,102 +169,102 @@ public class Map {
 			}
 		}
 
-		
-}
 
-public void initialize() {
-	//finding out number of possible tiles
-	File tilelist = new File("resources/tiles.txt");
-	int tilelength = 0;
-	Scanner scan;
-	try {
-		scan = new Scanner(tilelist);
-		while (scan.hasNextLine()) {
-			if (!(scan.nextLine()).isEmpty()) {
-				tilelength++;
+	}
+
+	public void initialize() {
+		//finding out number of possible tiles
+		File tilelist = new File("resources/tiles.txt");
+		int tilelength = 0;
+		Scanner scan;
+		try {
+			scan = new Scanner(tilelist);
+			while (scan.hasNextLine()) {
+				if (!(scan.nextLine()).isEmpty()) {
+					tilelength++;
+				}
+			}
+			scan.close();
+
+		} catch (FileNotFoundException e1) {
+			System.out.println("Tile declarations not found");
+		}
+		//setting image array size to number of tiles
+		baseimages = new Image[tilelength];
+		for (int i = 0; i < tilelength; i++) {
+			try {
+				baseimages[i] = ImageIO.read(new File("resources/" + i + ".png"));
+			} catch (IOException e) {
+				System.out.println("Image not found");
 			}
 		}
-		scan.close();
 
-	} catch (FileNotFoundException e1) {
-		System.out.println("Tile declarations not found");
-	}
-	//setting image array size to number of tiles
-	baseimages = new Image[tilelength];
-	for (int i = 0; i < tilelength; i++) {
-		try {
-			baseimages[i] = ImageIO.read(new File("resources/" + i + ".png"));
-		} catch (IOException e) {
-			System.out.println("Image not found");
-		}
 	}
 
-}
-
-public void debugDraw() {
-	for (int i = 0; i < h; i++) {
-		for (int j = 0; j < w; j++) {
-			System.out.print(" " + twodarray[i][j].getId());
-		}
-		System.out.println("");
-	}
-}
-
-public void save(String fname) {
-	File towrite = new File("resources/" + fname + ".txt");
-	try {
-		PrintWriter goin = new PrintWriter(towrite);
+	public void debugDraw() {
 		for (int i = 0; i < h; i++) {
 			for (int j = 0; j < w; j++) {
-				goin.print(twodarray[i][j].getId());
+				System.out.print(" " + twodarray[i][j].getId());
 			}
-			goin.println("");
-		}
-		goin.close();
-	} catch (IOException e) {
-	}
-
-}
-
-/**
- * Accessor for map array
- *
- * @return
- */
-public Tile[][] getMapArray() {
-	return twodarray;
-}
-
-/**
- * Accessor for map height
- *
- * @return
- */
-public int getHeight() {
-	return h;
-}
-
-/**
- * Accessor for map width
- *
- * @return
- */
-public int getWidth() {
-	return w;
-}
-
-public Image getImage(int x, int y) {
-	return twodarray[y][x].getDisplaypic();
-}
-
-public int getSurface(int x) {
-	for (int i = 0; i < h - 1; i++) {
-		if (twodarray[i][x].getId() != 0) {
-			return i;
+			System.out.println("");
 		}
 	}
-	return h - 1;
-}
+
+	public void save(String fname) {
+		File towrite = new File("resources/" + fname + ".txt");
+		try {
+			PrintWriter goin = new PrintWriter(towrite);
+			for (int i = 0; i < h; i++) {
+				for (int j = 0; j < w; j++) {
+					goin.print(twodarray[i][j].getId());
+				}
+				goin.println("");
+			}
+			goin.close();
+		} catch (IOException e) {
+		}
+
+	}
+
+	/**
+	 * Accessor for map array
+	 *
+	 * @return
+	 */
+	public Tile[][] getMapArray() {
+		return twodarray;
+	}
+
+	/**
+	 * Accessor for map height
+	 *
+	 * @return
+	 */
+	public int getHeight() {
+		return h;
+	}
+
+	/**
+	 * Accessor for map width
+	 *
+	 * @return
+	 */
+	public int getWidth() {
+		return w;
+	}
+
+	public Image getImage(int x, int y) {
+		return twodarray[y][x].getDisplaypic();
+	}
+
+	public int getSurface(int x) {
+		for (int i = 0; i < h - 1; i++) {
+			if (twodarray[i][x].getId() != 0) {
+				return i;
+			}
+		}
+		return h - 1;
+	}
 
 public void removeBlock(int x, int y) {
     if (isValid(x, y))
