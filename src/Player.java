@@ -3,10 +3,11 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
+import java.util.Hashtable;
 
 public class Player implements KeyListener, Runnable {
 
-    Map map; // temporary map
+    Map map;
 
     // variables to fix issue with key release
     private boolean released = false;
@@ -23,6 +24,9 @@ public class Player implements KeyListener, Runnable {
 
     // images
     private Image left, right, still;
+
+    // player inventory
+    private int[] inventory = new int[Map.baseimages.length];
 
     /**
      * Default constructor for player
@@ -164,6 +168,34 @@ public class Player implements KeyListener, Runnable {
     }
 
     /**
+     * Returns amount of the type of block in the inventory
+     * @param i
+     * @return
+     */
+    public int getInventoryAmount(int i) {
+        if (!(i < 0 || i > inventory.length))
+            return inventory[i];
+        else
+            return -1;
+    }
+
+    /**
+     * Increments number of block in inventory
+     * @param i
+     */
+    public void addToInventory(int i) {
+        inventory[i]++;
+    }
+
+    /**
+     * Decrements number of block in inventory
+     * @param i
+     */
+    public void takeFromInventory(int i) {
+        inventory[i]--;
+    }
+
+    /**
      * Physics thread
      */
     public void run() {
@@ -177,7 +209,7 @@ public class Player implements KeyListener, Runnable {
             if (!map.isSolid((int) rx, (int) ry + 1)) {
                 rx += vx * (double) timestep / 1000; // update x-pos
             } else {
-                rx = Math.round(rx); // stop movement <FIX>
+                rx = Math.round(rx); // stop movement
                 vx = 0;
             }
 

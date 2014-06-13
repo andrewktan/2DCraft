@@ -157,7 +157,7 @@ public class Map {
 							//if the block was previously air
 							if(!twodarray[y][x].isSolid())
 							{
-							twodarray[y][x]=new Tile(5,baseimages[5]);
+							twodarray[y][x]=new Tile(5, baseimages[5], false);
 							}
 						}
 					}
@@ -265,27 +265,38 @@ public class Map {
 		}
 		return h - 1;
 	}
-public void removeBlock(int x, int y) {
-    if (isValid(x, y))
-        twodarray[y][x] = new Tile(0, baseimages[0], false);
-}
 
-public void placeBlock(int x, int y, int n, boolean solid) {
-    if (isValid(x, y)) {
-        twodarray[y][x] = new Tile(n, baseimages[n], solid);
+    public int removeBlock(int x, int y) {
+        int i = -1;
+        if (isValid(x, y)) {
+            i = twodarray[y][x].getId();
+            twodarray[y][x] = new Tile(0, baseimages[0], false);
+        }
+        return i;
     }
-}
 
+    public int getBlockType(int x, int y) {
+        if (isValid(x, y))
+            return twodarray[y][x].getId();
+        else
+            return -1;
+    }
 
-public boolean isSolid(int x, int y) {
-    if (isValid(x, y))
-        return twodarray[y][x].isSolid();
-    else
-        return true;
+    public void placeBlock(int x, int y, int n, boolean solid) {
+        if (isValid(x, y)) {
+            twodarray[y][x] = new Tile(n, baseimages[n], solid);
+        }
+    }
 
-}
+    public boolean isSolid(int x, int y) {
+        if (isValid(x, y))
+            return twodarray[y][x].isSolid();
+        else
+            return true;
 
-protected boolean isValid(int x, int y) {
-    return !(x < 0 || x >= w || y < 0 || y >= h);
-}
+    }
+
+    protected boolean isValid(int x, int y) {
+        return !(x < 0 || x >= w || y < 0 || y >= h);
+    }
 }

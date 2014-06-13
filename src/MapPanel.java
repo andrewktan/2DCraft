@@ -11,6 +11,7 @@ public class MapPanel extends JPanel implements Runnable, MouseListener, KeyList
 
     Map map;
     Tile[][] twodarray;
+    private int focusedBlock = 1;
 
     public MapPanel(Map map, Player player) {
         // initialize map
@@ -36,6 +37,13 @@ public class MapPanel extends JPanel implements Runnable, MouseListener, KeyList
                         null);
             }
         }
+        if (focusedBlock != 0) {
+            g.drawImage(Map.baseimages[focusedBlock], (64 * 16 - 56), 5, 50, 50, null); // show focused block
+            // show amount in inventory
+            g.setColor(new Color(255, 220, 0));
+            g.drawString(Integer.toString(player.getInventoryAmount(focusedBlock)), (64 * 16 - 26), 20);
+        }
+
     }
 
     public void run() {
@@ -58,15 +66,30 @@ public class MapPanel extends JPanel implements Runnable, MouseListener, KeyList
      * @param e
      */
     public void keyPressed(KeyEvent e) {
+        // get coordinates of player
+        int x = (int) Math.round(player.getRx());
+        int y = (int) Math.round(player.getRy() + 2);
+
         // check if it's a number
-        if (e.getKeyChar() > '0' && e.getKeyChar() < '9')
-            map.placeBlock((int) Math.round(player.getRx()),
-                    (int) Math.round(player.getRy() + 2),
-                    (int) e.getKeyChar() - '0', // get numerical value
-                    !e.isAltDown());
-        else if (e.getKeyCode() == KeyEvent.VK_SPACE)
-            map.removeBlock((int) Math.round(player.getRx()),
-                    (int) Math.round(player.getRy() + 2)); // remove block below player
+        if (e.getKeyChar() > '0' && e.getKeyChar() < '9') {
+            int i = (int) e.getKeyChar() - '0';
+            if (player.getInventoryAmount(i) > 0 && map.getBlockType(x, y) == 0) {
+                map.placeBlock(x, y,
+                        i, // get numerical value
+                        !e.isAltDown());
+                player.takeFromInventory(i);
+            }
+        } else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+            int i = map.removeBlock(x, y); // remove block below player
+            if (i != -1 && i != 0)
+                player.addToInventory(i); // add removed block to inventory
+        } else if (e.getKeyCode() == KeyEvent.VK_E) {
+            if (focusedBlock < Map.baseimages.length - 1) // check boundary
+                focusedBlock++;
+        } else if (e.getKeyCode() == KeyEvent.VK_Q) {
+            if (focusedBlock > 0) // check boundary
+                focusedBlock--;
+        }
     }
 
     /**
@@ -98,6 +121,16 @@ public class MapPanel extends JPanel implements Runnable, MouseListener, KeyList
 
         int x = (int) Math.round(player.getFx() + ((p.getX()) / 16));
         int y = (int) Math.round(player.getFy() + ((p.getY() - 60) / 16));
-        map.placeBlock(x, y, 0, false);
+
+        if (focusedBlock == 0) {
+            int i = map.removeBlock(x, y);
+            if (i != 0)
+                player.addToInventory(i);
+        } else {
+            if (player.getInventoryAmount(focusedBlock) > 0 && map.getBlockType(x, y) == 0) {
+                map.placeBlock(x, y, focusedBlock, e.isShiftDown());
+                player.takeFromInventory(focusedBlock);
+            }
+        }
     }
 }
