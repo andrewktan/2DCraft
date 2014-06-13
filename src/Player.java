@@ -16,17 +16,20 @@ public class Player implements KeyListener, Runnable {
     private boolean inAir = false;
 
     // position and velocity variables
-    private double rx = 500, ry = 96, vx = 0, vy = 0;
+    private double rx = 500, ry = 156d, vx = 0, vy = 0;
     private double move_vx = 7, jump_vy = 8;
 
     // field of view
     private double fx = 500, fy = 100;
 
     // images
-    private Image left, right, still;
+    private Image left, right, still, dead;
 
     // player inventory
     private int[] inventory = new int[Map.baseimages.length];
+
+    // death
+    private boolean isDead = false;
 
     /**
      * Default constructor for player
@@ -59,6 +62,7 @@ public class Player implements KeyListener, Runnable {
             left = ImageIO.read(getClass().getResource("resources/pl.png"));
             right = ImageIO.read(getClass().getResource("resources/pr.png"));
             still = ImageIO.read(getClass().getResource("resources/ps.png"));
+            dead = ImageIO.read(getClass().getResource("resources/pd.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -76,7 +80,9 @@ public class Player implements KeyListener, Runnable {
         int posy = (int) ((ry - fy) * 16);
         // choose image
         Image player;
-        if (vx > 0)
+        if (isDead)
+            player = dead;
+        else if (vx > 0)
             player = right;
         else if (vx < 0)
             player = left;
@@ -200,7 +206,7 @@ public class Player implements KeyListener, Runnable {
      */
     public void run() {
         int timestep = 33; // in ms
-        while (true) {
+        while (!isDead) {
             if (released) {
                 vx = 0;
             }
@@ -219,6 +225,8 @@ public class Player implements KeyListener, Runnable {
                 vy += 20 * (double) timestep / 1000; // gravity
                 inAir = true;
             } else {
+                if (vy > 20)
+                    isDead = true; // kill player
                 ry = Math.floor(ry); // bring to top of block
                 vy = 0; // floor
                 inAir = false;
