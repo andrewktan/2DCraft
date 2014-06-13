@@ -265,7 +265,6 @@ public class Map {
 		}
 		return h - 1;
 	}
-
 public void removeBlock(int x, int y) {
     if (isValid(x, y))
         twodarray[y][x] = new Tile(0, baseimages[0], false);
