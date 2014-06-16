@@ -39,17 +39,17 @@ public class MapPanel extends JPanel implements Runnable, MouseListener, KeyList
         }
         // draw inventory bar
         int numItems = Map.baseimages.length - 1;
-        g.fillRect((32 * 16) - (30 * numItems) + (focusedBlock * 60) - 5,
+        g.fillRect((32 * 16) - (30 * numItems) + ((focusedBlock - 1) * 60) - 5,
                 (27 * 16 - 5),
                 60, 60); // show focused block
-        for (int i = 1; i < numItems; i++) {
-            g.drawImage(Map.baseimages[i], (32 * 16) - (30 * numItems) + (i * 60), // to center inventory bar
+        for (int i = 1; i < numItems + 1; i++) {
+            g.drawImage(Map.baseimages[i], (32 * 16) - (30 * numItems) + ((i - 1) * 60), // to center inventory bar
                     (27 * 16),
                     50, 50, null); // show focused block
             // show amount in inventory
             g.setColor(new Color(255, 220, 0));
             g.drawString(Integer.toString(player.getInventoryAmount(i)),
-                    (32 * 16) - (30 * numItems) + (i * 60) + 40,
+                    (32 * 16) - (30 * numItems) + ((i - 1) * 60) + 37,
                     (27 * 16 + 15));
         }
 
@@ -88,7 +88,7 @@ public class MapPanel extends JPanel implements Runnable, MouseListener, KeyList
                         !e.isAltDown());
                 player.takeFromInventory(i);
             }
-        } else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+        } else if (e.getKeyCode() == KeyEvent.VK_SPACE && map.getBlockType(x, y) != 6) { // cannot remove bedrock
             int i = map.removeBlock(x, y); // remove block below player
             if (i != -1 && i != 0)
                 player.addToInventory(i); // add removed block to inventory
@@ -131,13 +131,13 @@ public class MapPanel extends JPanel implements Runnable, MouseListener, KeyList
         int x = (int) Math.round(player.getFx() + ((p.getX()) / 16));
         int y = (int) Math.round(player.getFy() + ((p.getY() - 60) / 16));
 
-        if (focusedBlock == 0) {
+        if (focusedBlock == 0 && map.getBlockType(x, y) != 6) { // cannot remove bedrock
             int i = map.removeBlock(x, y);
             if (i != 0)
                 player.addToInventory(i);
         } else {
             if (player.getInventoryAmount(focusedBlock) > 0 && map.getBlockType(x, y) == 0) {
-                map.placeBlock(x, y, focusedBlock, e.isShiftDown());
+                map.placeBlock(x, y, focusedBlock, !e.isAltDown());
                 player.takeFromInventory(focusedBlock);
             }
         }

@@ -16,7 +16,7 @@ public class Player implements KeyListener, Runnable {
     private boolean inAir = false;
 
     // position and velocity variables
-    private double rx = 500, ry = 156d, vx = 0, vy = 0;
+    private double rx = 500, ry = 156, vx = 0, vy = 0;
     private double move_vx = 7, jump_vy = 8;
 
     // field of view
@@ -60,10 +60,10 @@ public class Player implements KeyListener, Runnable {
     private void loadImages() {
         try {
             // load player images
-            left = ImageIO.read(getClass().getResource("pl.png"));
-            right = ImageIO.read(getClass().getResource("pr.png"));
-            still = ImageIO.read(getClass().getResource("ps.png"));
-            dead = ImageIO.read(getClass().getResource("pd.png"));
+            left = ImageIO.read(getClass().getResource("resources/pl.png"));
+            right = ImageIO.read(getClass().getResource("resources/pr.png"));
+            still = ImageIO.read(getClass().getResource("resources/ps.png"));
+            dead = ImageIO.read(getClass().getResource("resources/pd.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -246,20 +246,20 @@ public class Player implements KeyListener, Runnable {
 
             if (fx < 0)
                 fx = 0;
-            else if (fx + 64 > map.getWidth())
+            else if (fx + 64 + 1> map.getWidth())
                 fx = map.getWidth() - 64 - 1;
 
             // y-direction
             if (ry - fy < 10)
-                vy_pan = -(Math.abs(vy) + 5);
+                vy_pan = -(Math.abs(vy) + 10);
             else if ((fy + 32) - ry < 10)
-                vy_pan = Math.abs(vy) + 5;
+                vy_pan = Math.abs(vy) + 10;
 
             fy += vy_pan * (double) timestep / 1000;
 
             if (fy < 0)
                 fy = 0;
-            else if (fy + 32 > map.getHeight())
+            else if (fy + 32 + 1 > map.getHeight())
                 fy = map.getHeight() - 32 - 1;
 
             try {
