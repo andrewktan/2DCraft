@@ -38,6 +38,7 @@ public class Player implements KeyListener, Runnable {
         loadImages();
         new Thread(this).start();
         this.map = map;
+        ry=map.getSurface((int)(rx));
     }
 
     /**
@@ -59,10 +60,10 @@ public class Player implements KeyListener, Runnable {
     private void loadImages() {
         try {
             // load player images
-            left = ImageIO.read(getClass().getResource("resources/pl.png"));
-            right = ImageIO.read(getClass().getResource("resources/pr.png"));
-            still = ImageIO.read(getClass().getResource("resources/ps.png"));
-            dead = ImageIO.read(getClass().getResource("resources/pd.png"));
+            left = ImageIO.read(getClass().getResource("pl.png"));
+            right = ImageIO.read(getClass().getResource("pr.png"));
+            still = ImageIO.read(getClass().getResource("ps.png"));
+            dead = ImageIO.read(getClass().getResource("pd.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
