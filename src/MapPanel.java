@@ -37,11 +37,20 @@ public class MapPanel extends JPanel implements Runnable, MouseListener, KeyList
                         null);
             }
         }
-        if (focusedBlock != 0) {
-            g.drawImage(Map.baseimages[focusedBlock], (64 * 16 - 56), 5, 50, 50, null); // show focused block
+        // draw inventory bar
+        int numItems = Map.baseimages.length - 1;
+        g.fillRect((32 * 16) - (30 * numItems) + (focusedBlock * 60) - 5,
+                (27 * 16 - 5),
+                60, 60); // show focused block
+        for (int i = 1; i < numItems; i++) {
+            g.drawImage(Map.baseimages[i], (32 * 16) - (30 * numItems) + (i * 60), // to center inventory bar
+                    (27 * 16),
+                    50, 50, null); // show focused block
             // show amount in inventory
             g.setColor(new Color(255, 220, 0));
-            g.drawString(Integer.toString(player.getInventoryAmount(focusedBlock)), (64 * 16 - 26), 20);
+            g.drawString(Integer.toString(player.getInventoryAmount(i)),
+                    (32 * 16) - (30 * numItems) + (i * 60) + 40,
+                    (27 * 16 + 15));
         }
 
     }
