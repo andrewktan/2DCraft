@@ -3,7 +3,6 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
-import java.util.Hashtable;
 
 public class Player implements KeyListener, Runnable {
 
@@ -38,7 +37,7 @@ public class Player implements KeyListener, Runnable {
         loadImages();
         new Thread(this).start();
         this.map = map;
-        ry=map.getSurface((int)(rx))-5;
+        ry = map.getSurface((int) (rx)) - 5;
     }
 
     /**
@@ -60,10 +59,10 @@ public class Player implements KeyListener, Runnable {
     private void loadImages() {
         try {
             // load player images
-            left = ImageIO.read(getClass().getResource("pl.png"));
-            right = ImageIO.read(getClass().getResource("pr.png"));
-            still = ImageIO.read(getClass().getResource("ps.png"));
-            dead = ImageIO.read(getClass().getResource("pd.png"));
+            left = ImageIO.read(getClass().getResource("resources/pl.png"));
+            right = ImageIO.read(getClass().getResource("resources/pr.png"));
+            still = ImageIO.read(getClass().getResource("resources/ps.png"));
+            dead = ImageIO.read(getClass().getResource("resources/pd.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -176,6 +175,7 @@ public class Player implements KeyListener, Runnable {
 
     /**
      * Returns amount of the type of block in the inventory
+     *
      * @param i
      * @return
      */
@@ -188,6 +188,7 @@ public class Player implements KeyListener, Runnable {
 
     /**
      * Increments number of block in inventory
+     *
      * @param i
      */
     public void addToInventory(int i) {
@@ -196,6 +197,7 @@ public class Player implements KeyListener, Runnable {
 
     /**
      * Decrements number of block in inventory
+     *
      * @param i
      */
     public void takeFromInventory(int i) {
@@ -246,7 +248,7 @@ public class Player implements KeyListener, Runnable {
 
             if (fx < 0)
                 fx = 0;
-            else if (fx + 64 + 1> map.getWidth())
+            else if (fx + 64 + 1 > map.getWidth())
                 fx = map.getWidth() - 64 - 1;
 
             // y-direction

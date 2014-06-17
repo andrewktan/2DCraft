@@ -18,8 +18,8 @@ public class PlayerPanel extends JPanel implements Runnable {
     public void run() {
         while (true) {
             // refresh display at 30Hz
-            coord.setText(String.format("x: %.2f | y: %.2f", player.getRx(), player.getRy()));
-            add(coord);
+            //coord.setText(String.format("x: %.2f | y: %.2f", player.getRx(), player.getRy()));
+            //add(coord);
             repaint();
             try {
                 Thread.sleep(33);
