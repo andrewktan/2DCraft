@@ -157,7 +157,7 @@ public class Map {
 							//if the block was previously air
 							if(!twodarray[y][x].isSolid())
 							{
-							twodarray[y][x]=new Tile(5, baseimages[5], false);
+								twodarray[y][x]=new Tile(5, baseimages[5], false);
 							}
 						}
 					}
@@ -165,6 +165,49 @@ public class Map {
 				//log generation
 				for (int k = 0; k < height; k++) {
 					twodarray[surface-k-1][centerx]=new Tile(4,baseimages[4]);
+				}
+			}
+		}
+
+		//ore generation
+		for (int i=20;i<w-19;i++)
+		{
+			for(int j=20;j<h-19;j++)
+			{
+				if(twodarray[j][i].getId()==3)
+				{	
+					//value of the ore
+					double orevalue=Math.random()*905+1;
+					//if orevalue is more than 900, generate some sort of ores
+					if(orevalue>900)
+					{
+						int oretype=(int)((j-this.getSurface(i)+orevalue/100)/15)+6;
+						if(oretype<7)
+						{
+							oretype=7;
+						}
+						if(oretype>12)
+						{
+							oretype=12;
+						}
+						//total size of vein
+						double veinsize=Math.random()*3+20/Math.pow(oretype,1.5);
+						
+						for (int x=i-(int)(Math.random()*10);x<i+(int)(Math.random()*11);x++)
+						{
+							
+							for (int y=j-(int)(Math.random()*11);y<j+(int)(Math.random()*11);y++)
+							{
+								//making ore veins flatter than they are wide
+								double manhattan=0.25*Math.abs(x-i)+Math.abs(y-j);
+								if(manhattan<veinsize)
+								{
+									twodarray[y][x]=new Tile(oretype,baseimages[oretype]);
+								}
+							}
+						}
+
+					}
 				}
 			}
 		}
@@ -259,44 +302,44 @@ public class Map {
 
 	public int getSurface(int x) {
 		for (int i = 0; i < h - 1; i++) {
-			if (twodarray[i][x].getId() != 0) {
+			if (twodarray[i][x].isSolid()) {
 				return i;
 			}
 		}
 		return h - 1;
 	}
 
-    public int removeBlock(int x, int y) {
-        int i = -1;
-        if (isValid(x, y)) {
-            i = twodarray[y][x].getId();
-            twodarray[y][x] = new Tile(0, baseimages[0], false);
-        }
-        return i;
-    }
+	public int removeBlock(int x, int y) {
+		int i = -1;
+		if (isValid(x, y)) {
+			i = twodarray[y][x].getId();
+			twodarray[y][x] = new Tile(0, baseimages[0], false);
+		}
+		return i;
+	}
 
-    public int getBlockType(int x, int y) {
-        if (isValid(x, y))
-            return twodarray[y][x].getId();
-        else
-            return -1;
-    }
+	public int getBlockType(int x, int y) {
+		if (isValid(x, y))
+			return twodarray[y][x].getId();
+		else
+			return -1;
+	}
 
-    public void placeBlock(int x, int y, int n, boolean solid) {
-        if (isValid(x, y)) {
-            twodarray[y][x] = new Tile(n, baseimages[n], solid);
-        }
-    }
+	public void placeBlock(int x, int y, int n, boolean solid) {
+		if (isValid(x, y)) {
+			twodarray[y][x] = new Tile(n, baseimages[n], solid);
+		}
+	}
 
-    public boolean isSolid(int x, int y) {
-        if (isValid(x, y))
-            return twodarray[y][x].isSolid();
-        else
-            return true;
+	public boolean isSolid(int x, int y) {
+		if (isValid(x, y))
+			return twodarray[y][x].isSolid();
+		else
+			return true;
 
-    }
+	}
 
-    protected boolean isValid(int x, int y) {
-        return !(x < 0 || x >= w || y < 0 || y >= h);
-    }
+	protected boolean isValid(int x, int y) {
+		return !(x < 0 || x >= w || y < 0 || y >= h);
+	}
 }
