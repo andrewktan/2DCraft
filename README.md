@@ -3,14 +3,14 @@
 
 Project for Introduction to Comupter Science (ICS4U1).
 
-## In Game Instructions ##
+### In Game Instructions ###
 
     - WASD controls to move
     - Space removes the tile directly below the player
     - Keys 1 - 9 place blocks directly below the player
     - Use mouse to remove and place blocks in the field of view
 
-## Features ##
+### Features ###
 
     - Player
         - Ability to move (important)
@@ -20,7 +20,7 @@ Project for Introduction to Comupter Science (ICS4U1).
         - Terrain, ore, and trees
     - Keyboard and mouse controls
 
-## Errata (err... more features) ##
+### Bugs (err... more features) ###
 
     - Ability to enter and climb blocks only while moving to the right
     - Interesting and spontaneous behaviour near edges of the map
